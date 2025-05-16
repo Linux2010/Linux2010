@@ -1,5 +1,11 @@
+<img align="right" src="https://github-readme-stats-git-masterrstaa-rickstaa.vercel.app/api?username=linux2010&show_icons=true&include_all_commits=true&hide_border=true" />
+
 ### Hi there 👋
-pass
+
+- 🔭 I’m currently working on [a2a-python](https://github.com/google/a2a-python)
+- 🌱 I’m currently learning analytics and AGI
+- 📫 How to reach me: linuxmorebetter@gmail.com
+
 <!--
 **Linux2010/Linux2010** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
