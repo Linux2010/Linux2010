@@ -2,7 +2,7 @@
 
 ### Hi there 👋
 
-- 🌱 I’m currently learning analytics and AGI
+- 🌱 I’m currently learning Data analytics and AGI
 - 📫 How to reach me: linuxmorebetter@gmail.com
 
 <!--
