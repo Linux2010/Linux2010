@@ -184,6 +184,15 @@ curl -s https://github.com/Linux2010 | grep -c 'unreadable-img\|js-unreadable'
 | 2.4 图片可访问性 | ➖ 未触发 | 因未引入图片。后续若加，按 §1 约束执行。 |
 | **1.0 publicize `orion-agents`** | ❌ **受阻（非权限不足，是 token scope）** | `PUT /orgs/orion-agents/memberships/Linux2010 -f visibility=public` 返回 403 `You must be an admin…` + CLI 提示 `This API operation needs the "admin:org" scope`。当前 `gh auth status` 实际 scopes = `read:org, repo, workflow, write:packages` —— 你是该 org 的 `admin`（`role=admin, state=active` 已确认），缺的只是令牌作用域。执行前后 `public_members` 均为 0，即**主页目前仍不显示组织徽章**。 |
 | 3.1 保鲜工作流 | ⏸ **未安装** | 有意未装。线上 README 因此把标记块文案落为 `Counts verified 2026-11-02 against the GitHub Search API` —— 不宣称"每月自动刷新"，避免 README 陈述一件尚未成立的事实。标记对 `<!--START/END_SECTION:contributions-->` 已预留，装工作流时无需再改 README。 |
+| **补充：两个自建组织上主页** | ✅ **已上线**（`0f45221`） | 抬头同时点名 `orion-agents` 与 `skills-repo`，并新增 `### 📦 Skills — skills-repo` 章节。所引 12 个技能仓库逐个经 API 核实为 public / `archived=false` / `fork=false`。 |
+
+### 7.1 审计自查：初版评估漏算了一个更大的隐藏资产
+
+初版审计只看 `GET /users/Linux2010/repos`（个人仓库），因此**没发现 `skills-repo` 这个 37 个公开库、0 fork 的组织** —— 而它和 `orion-agents` 同日创建于 2026-07-26。经 `/user/memberships/orgs` 核实，你是 **6 个组织的 admin**：`JDZWTS · open-horse · quick-hope · skills-repo · orion-agents · agi-wiki`。
+
+**这同时加重了 P0-4**：`GET /users/Linux2010/orgs` 长度为 0 → **6 个成员身份全部未 publicize**，主页上一个组织徽章都不显示。你在 UI 里可以逐个点亮（`github.com/settings/organizations`），一次动作能让 6 个原生徽章同时出现在姓名下方 —— 比 README 里任何一行文字都更有背书力，且当前令牌缺 `admin:org` scope，只能走网页或 `gh auth refresh -h github.com -s admin:org -s user`。
+
+> 教训（写进方法论）：评估 GitHub 档案时，`/users/{u}/repos` 只覆盖个人仓库，**必须再查组织成员身份**，否则会系统性低估产出归属 —— 尤其在 agent 时代，作品常放在自建 org 下而非个人账号。
 | 1.1 bio / 1.2 name / 1.3 blog·X / 1.4 hiredable | ⏳ 待办 | 同属账号元数据写入，需要 `user` scope（当前令牌也没有）→ 与 1.0 一并处理。 |
 | 1.5 精选仓库 / 1.6 description / 1.7 fork 清理 | ⏳ 待办 | 1.7 不可逆，仍需你确认范围。 |
 

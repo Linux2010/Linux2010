@@ -114,7 +114,9 @@ GET /users/Linux2010/orgs                    → 200, length 0                  
 
 调研结论明确写着：**组织成员身份由 GitHub 原生渲染在头像/姓名下方，是最强可信信号**（`§3 趋势 ⑤`）。而你现在是 `orion-agents` 的 admin —— 一个你 2026-07-26 创建、133 个合并 PR 落在其中的组织 —— 却因为成员身份未公开，主页上**一个像素都没有显示**。
 
-修复成本：档案页 Organization 区块点一次眼睛图标（或 `POST /user/publicizations`）。**这是全部改动中性价比最高的一条：零代码、零写作、立刻让主页出现一个"我拥有并组织化的东西"的原生徽章。**
+修复成本：档案页 Organization 区块点一次眼睛图标（或 `PUT /orgs/orion-agents/memberships/Linux2010` 配 `visibility=public`，需 `admin:org` scope）。**这是全部改动中性价比最高的一条：零代码、零写作、立刻让主页出现一个"我拥有并组织化的东西"的原生徽章。**
+
+**后续核实（同日补充）**：`GET /user/memberships/orgs` 显示你是 **6 个组织的 admin** —— `JDZWTS · open-horse · quick-hope · skills-repo · orion-agents · agi-wiki`，而 `users/Linux2010/orgs` 长度为 0 → **6 个成员身份全未 publicize，主页 0 曝光**。其中 `skills-repo`（技能组仓库，2026-07-26 创建）有 **37 个公开库、0 个 fork**，体量超过你个人账号下的全部自建仓库 —— 初版审计因只查 `/users/{u}/repos` 而漏掉了它，详见方案 §7.1。
 
 （附带收益：org logo 一旦显示，读者从 README 读到 "Orion" 时能立刻在侧栏对上，形成互证。）
 
