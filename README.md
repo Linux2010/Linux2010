@@ -2,7 +2,8 @@
 
 **I build coding agents, and I land the fixes.**
 
-Creator of **[Orion](https://github.com/orion-agents)** — a goal-driven coding agent for the terminal.
+Creator of **[Orion](https://github.com/orion-agents)** — a goal-driven coding agent for the terminal —
+and of **[skills-repo](https://github.com/skills-repo)**, a library of curated AI-agent skills.
 Upstream contributor to **[OpenClaw](https://github.com/openclaw/openclaw)** and the **[A2A Protocol](https://github.com/a2aproject)**.
 
 `267 PRs merged` · `133 → Orion` · `16 → OpenClaw` · `10 → A2A`
@@ -19,6 +20,23 @@ reviewable diffs rather than one-shot completions. I opened and merged **133 PRs
 | [orion-code](https://github.com/orion-agents/orion-code) | The agent — goal loop, tool orchestration, terminal UI (TypeScript, MIT) |
 | [orion-code-docs](https://github.com/orion-agents/orion-code-docs) | Documentation |
 | [orion-agents-www](https://github.com/orion-agents/orion-agents-www) | Project site |
+
+---
+
+### 📦 Skills — skills-repo
+
+**[skills-repo](https://github.com/skills-repo)** (技能组仓库) — the other org I created, in Jul 2026.
+**37 published skill libraries, all self-authored (0 forks)**: one domain per repo, each pairing a written
+methodology with runnable quality-gate scripts an agent can execute directly.
+
+| Domain | Example libraries |
+| --- | --- |
+| Engineering | [security-guardian](https://github.com/skills-repo/security-guardian) · [database-engineer](https://github.com/skills-repo/database-engineer) · [devops-engineer](https://github.com/skills-repo/devops-engineer) · [accessibility-engineer](https://github.com/skills-repo/accessibility-engineer) · [machine-learning-engineer](https://github.com/skills-repo/machine-learning-engineer) |
+| Product & content | [product-manager](https://github.com/skills-repo/product-manager) · [docs-writer](https://github.com/skills-repo/docs-writer) · [content-creator](https://github.com/skills-repo/content-creator) · [visual-designer](https://github.com/skills-repo/visual-designer) |
+| Ops & growth | [startup-founder](https://github.com/skills-repo/startup-founder) · [marketing-master](https://github.com/skills-repo/marketing-master) · [career-coach](https://github.com/skills-repo/career-coach) |
+
+Stated rule for the catalogue: one domain, one skill group, one methodology — quality over breadth, so a repo
+gets archived when its content folds into a successor rather than kept alive for the count.
 
 ---
 
