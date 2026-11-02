@@ -1,0 +1,104 @@
+# 阶段 3 · 主页保鲜工作流草案
+# 落地路径：本仓库 .github/workflows/profile-refresh.yml
+#
+# 作用：每月用 GitHub Search API 重算「上游贡献台账」的合并 PR 数，写进 README.md 的
+#       <!--START_SECTION:contributions--> / <!--END_SECTION:contributions--> 标记块。
+#       调研结论：自动化标记块是"真实维护者"最强信号（7/38 头部档案采用）；
+#       手写死数字则会过期（反面案例：HwangTaehyun 用静态徽章硬写 "Code Time 1,342 hrs"）。
+#
+# 设计约束（均来自调研）：
+#   - 只用内置 GITHUB_TOKEN，不落盘任何明文 PAT；permissions 收敛为 contents: write
+#   - 不依赖 github-readme-stats 公共实例（作者已承认无法可靠运行，issue #4680）
+#   - 不使用 Ashutosh00710 activity-graph action（该仓库已无 action.yml / tag，教程配方已失效）
+#   - 无变化则不 commit，避免提交历史噪音
+#   - Search API 限速 10 req/min（GITHUB_TOKEN 口径），故每次查询间隔 1.5s
+
+name: profile-refresh
+
+on:
+  schedule:
+    - cron: '17 3 1 * *'      # 每月 1 日 03:17 UTC（错开整点，避开 Actions 排队）
+  workflow_dispatch: {}        # 允许手动触发一次
+
+permissions:
+  contents: write              # 仅此 workflow 需要写 README.md
+
+jobs:
+  contribution-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Recompute merged-PR counts and rewrite the marker block
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const FILE  = 'README.md';
+            const START = '<!--START_SECTION:contributions-->';
+            const END   = '<!--END_SECTION:contributions-->';
+            const OWNER = context.repo.owner;   // Linux2010
+
+            // 台账行：label = 显示名，url = 可点击的去处，q = Search 查询前缀
+            const targets = [
+              { label: 'OpenClaw',               url: 'https://github.com/openclaw/openclaw', q: 'repo:openclaw/openclaw' },
+              { label: 'A2A Protocol',           url: 'https://github.com/a2aproject',        q: 'org:a2aproject' },
+              { label: 'Orion (my own)',         url: 'https://github.com/orion-agents',      q: 'org:orion-agents' },
+            ];
+
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
+            const rows = [];
+
+            for (const t of targets) {
+              const res = await github.rest.search.issuesAndPullRequests({
+                q: `${t.q} author:${OWNER} is:pr is:merged`,
+                per_page: 1,
+              });
+              rows.push({ label: t.label, url: t.url, n: res.data.total_count });
+              await sleep(1500);
+            }
+
+            // 合计：全部已合并 PR（含未列出的项目）
+            const all = await github.rest.search.issuesAndPullRequests({
+              q: `author:${OWNER} is:pr is:merged`,
+              per_page: 1,
+            });
+
+            const today = new Date().toISOString().slice(0, 10);
+            const body = [
+              '| Where | PRs merged |',
+              '| --- | ---: |',
+              ...rows.map(r => `| [${r.label}](${r.url}) | ${r.n} |`),
+              `| **Total across GitHub** | **${all.data.total_count}** |`,
+              '',
+              `*Auto-refreshed ${today} from the GitHub Search API — \`is:pr is:merged author:${OWNER}\`.*`,
+            ].join('\n');
+
+            const path = `${process.env.GITHUB_WORKSPACE}/${FILE}`;
+            const readme = fs.readFileSync(path, 'utf8');
+
+            const s = readme.indexOf(START);
+            const e = readme.indexOf(END);
+            if (s === -1 || e === -1 || e < s) {
+              core.setFailed(`${START} / ${END} marker pair not found in ${FILE}`);
+              return;
+            }
+
+            const next = readme.slice(0, s + START.length) + '\n' + body + '\n' + readme.slice(e);
+            fs.writeFileSync(path, next);
+
+            core.setOutput('changed', String(next !== readme));
+            core.info(next === readme ? 'No change' : 'Ledger updated');
+
+      - name: Commit only when the ledger changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No change — skipping commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore(profile): refresh contribution ledger [skip ci]"
+          git push
