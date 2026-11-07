@@ -102,6 +102,7 @@ playbooks. Small on purpose; it's where I write down what broke.
 
 - ✉️ [linuxmorebetter@gmail.com](mailto:linuxmorebetter@gmail.com) ← primary
 - 💬 Telegram [@worldhello321](https://t.me/worldhello321)
+- ✍️ [blog.csdn.net/UncleTian](https://blog.csdn.net/UncleTian) — Chinese-language notes
 - 中文沟通请直接邮件或 Telegram · 上海
 
 <sub>Currently: making Orion handle long-horizon refactors without losing the thread.</sub>

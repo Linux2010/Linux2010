@@ -102,6 +102,7 @@ TypeScript 写 Agent 运行时，Python 写协议与 SDK，Java 处理数据链�
 
 - ✉️ [linuxmorebetter@gmail.com](mailto:linuxmorebetter@gmail.com) ← 主要渠道
 - 💬 Telegram [@worldhello321](https://t.me/worldhello321)
+- ✍️ [blog.csdn.net/UncleTian](https://blog.csdn.net/UncleTian) —— 中文技术博客
 - 📍 上海 · 中文沟通请直接邮件或 Telegram
 
 <sub>当前在做：让 Orion 处理长程重构时不丢失主线。</sub>
