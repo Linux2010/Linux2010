@@ -1,19 +1,21 @@
 ## Andy Tien <sub>(a.k.a. Hope)</sub>
 
+**English** · [简体中文](./README.zh-CN.md)
+
 **I build coding agents, and I land the fixes.**
 
 Creator of **[Orion](https://github.com/orion-agents)** — a goal-driven coding agent for the terminal —
 and of **[skills-repo](https://github.com/skills-repo)**, a library of curated AI-agent skills.
 Upstream contributor to **[OpenClaw](https://github.com/openclaw/openclaw)** and the **[A2A Protocol](https://github.com/a2aproject)**.
 
-`267 PRs merged` · `133 → Orion` · `16 → OpenClaw` · `10 → A2A`
+`270 PRs merged` · `136 → Orion` · `16 → OpenClaw` · `10 → A2A`
 
 ---
 
 ### 🔧 Building — Orion
 
 A goal-driven coding agent that runs in your terminal. TypeScript, built for long-horizon tasks and
-reviewable diffs rather than one-shot completions. I opened and merged **133 PRs** here since Jul 2026.
+reviewable diffs rather than one-shot completions. I opened and merged **136 PRs** here since Jul 2026.
 
 | Repo | What it is |
 | --- | --- |
@@ -60,7 +62,7 @@ Not stars — patches. Every line below is clickable and verifiable.
 - [#534](https://github.com/a2aproject/A2A/pull/534) — fix(spec): Optimize the camel case naming
 
 <!--START_SECTION:contributions-->
-*Counts verified 2026-11-02 against the GitHub Search API (`is:pr is:merged author:Linux2010`).*
+*Counts verified 2026-11-03 against the GitHub Search API (`is:pr is:merged author:Linux2010`).*
 <!--END_SECTION:contributions-->
 
 ---
