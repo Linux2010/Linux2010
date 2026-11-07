@@ -15,7 +15,7 @@
 | `bio` | `Java \| Python \| Bigdata \| Data Warehouse \| Data Analysis \| AI` | **严重过期**：与 README 的定位"AI 自动化与智能体生态建设者"直接冲突；主页上 bio 紧贴头像、优先级高于 README |
 | `company` | `antgroup`（无组织关联，纯文本） | 未加入 GitHub Organization，因此不渲染成可点击的 org 卡片（`/users/Linux2010/orgs` 返回 200 但长度为 **0** = 无任何公开组织成员身份） |
 | 组织成员身份 | 你是 `orion-agents` 的 **`role=admin, state=active`** 成员，但该 org 的 `public_members` 列表为**空** → **成员身份未 publicize** | 🔴 主页完全不显示你亲手创建的组织的 logo —— 见 P0-4 |
-| `blog` | 空 | 主页无个人站点链接，失去最强可信锚点 |
+| `blog` | API 返回**空**（REST `blog=""`、GraphQL `websiteUrl: null`）—— **但 2026-11-03 浏览器实访发现侧栏公开显示 `https://blog.csdn.net/UncleTian`** | 两处字段读数与线上渲染不一致；以线上为准：站点其实已有，只是 API 取不到。README 原本漏了它，已补入（见 §4） |
 | `twitter_username` | `null` | X 用户名未绑定 → 头像下方不显示社交图标 |
 | `hireable` | `null`（未开启） | 与 README "当前在学习" 的求职/合作意图不匹配 |
 | `location` | `Shanghai China` | OK |
@@ -174,3 +174,20 @@ GET /users/Linux2010/orgs                    → 200, length 0                  
 | 死链/掉价挂件 | — | 2 处依赖重定向；无掉价挂件 | ⚠️ |
 
 **一句话结论**：主页不是"不够花哨"，而是**信息错配** —— 用 2 千字节展示了别人的 4 个仓库，却把自己 267 个合并 PR、1 个亲手创建的 org 和 1 个自研 Agent 项目全部藏起来了；同时档案区（bio/名字/精选仓库）在往反方向解释这个人。
+
+---
+
+## 4. 线上实测复核（2026-11-03，浏览器实访 + REST/GraphQL 交叉验证）
+
+| 复核项 | 实测结果 | 对审计的影响 |
+|---|---|---|
+| 双语切换 | 主页渲染出的切换链接 href 已被 GitHub 改写为绝对地址 `…/Linux2010/blob/main/README.zh-CN.md` | ✅ 档案仓库里的相对链接可正常跳转，双语方案在主页场景成立 |
+| 精选仓库 | GraphQL `pinnedItems.totalCount = 0`，页面区块标题实际为 **"Popular repositories"**（非 "Pinned"） | 🟠 **P1-4 由"疑似"升级为确认**：档案区确实在用 GitHub 自动挑选的结果 |
+| 组织区块 | 侧栏**没有** Organizations 区块（匿名视图） | 🔴 **P0-4 确认仍未解除** |
+| ⚠️ GraphQL 口径陷阱 | `user.organizations` 返回 6 个组织 —— 因为查询令牌就是本人账号，**含未公开成员身份** | 判"是否公开"必须用 `GET /users/{u}/orgs`（返回 0）+ 页面实访，**不能信 GraphQL 的条数** |
+| 成就徽章 | 原生渲染且可见：**Pull Shark ×3 · Pair Extraordinaire ×3 · YOLO · Quickdraw · Arctic Code Vault Contributor** | 🟢 与主页"看补丁不看星数"的叙事互证；按调研结论**不需要也不应**把它们嵌进 README（GitHub 无官方嵌入 API，抓 PNG 属 ToS 灰区） |
+| bio | 线上仍是 `Java \| Python \| Bigdata \| Data Warehouse \| Data Analysis \| AI`；`isHireable=false`、`twitterUsername=null` | 🔴 **P0-3 未解除**（需 `user` scope 或网页改） |
+| 个人站点 | 侧栏公开显示 CSDN 博客，但 REST/GraphQL 均报空；链接实测 200、标题含 "Andy" | 🟡 §1.1 已更正；两份 README 已补入该链接（提交 `44d9887`） |
+| 数字漂移 | 一天之内 `267 → 270`、`133 → 136`；`16 → OpenClaw`、`10 → A2A` 未变 | 🟠 实证了"写进主页的数字必须可核验或可刷新"—— 也是方案 §3.1 月度刷新工作流的理由 |
+
+**方法教训**：`curl` 在本环境抓 `github.com` 返回 `bytes=0`（被拦截），一度让我把"精选仓库是否固定"写成推测句。改用浏览器自动化取 DOM 快照 + 双 API 交叉，才把三项悬而未决的判断（pinned / Organizations / 成就徽章）钉成事实。判读主页渲染时，**页面 DOM 是权威，REST 单字段不是**。

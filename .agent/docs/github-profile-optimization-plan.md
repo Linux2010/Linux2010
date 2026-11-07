@@ -185,6 +185,7 @@ curl -s https://github.com/Linux2010 | grep -c 'unreadable-img\|js-unreadable'
 | **1.0 publicize `orion-agents`** | ❌ **受阻（非权限不足，是 token scope）** | `PUT /orgs/orion-agents/memberships/Linux2010 -f visibility=public` 返回 403 `You must be an admin…` + CLI 提示 `This API operation needs the "admin:org" scope`。当前 `gh auth status` 实际 scopes = `read:org, repo, workflow, write:packages` —— 你是该 org 的 `admin`（`role=admin, state=active` 已确认），缺的只是令牌作用域。执行前后 `public_members` 均为 0，即**主页目前仍不显示组织徽章**。 |
 | 3.1 保鲜工作流 | ⏸ **未安装** | 有意未装。线上 README 因此把标记块文案落为 `Counts verified 2026-11-02 against the GitHub Search API` —— 不宣称"每月自动刷新"，避免 README 陈述一件尚未成立的事实。标记对 `<!--START/END_SECTION:contributions-->` 已预留，装工作流时无需再改 README。 |
 | **补充：两个自建组织上主页** | ✅ **已上线**（`0f45221`） | 抬头同时点名 `orion-agents` 与 `skills-repo`，并新增 `### 📦 Skills — skills-repo` 章节。所引 12 个技能仓库逐个经 API 核实为 public / `archived=false` / `fork=false`。 |
+| **2026-11-03：双语化** | ✅ **已上线**（`93345bc` + `44d9887`） | 按 OSS 通行做法（参照 `ant-design/ant-design` 的 `English · [中文]` 互指模式）拆为 `README.md`（英文默认）+ `README.zh-CN.md`（中文镜像）。两份章节 1:1、链接集完全相同、数字一致，PR 标题保留上游英文原文以维持可验证性。浏览器实访确认切换链接在主页渲染为绝对 blob 地址。 |
 
 ### 7.1 审计自查：初版评估漏算了一个更大的隐藏资产
 
